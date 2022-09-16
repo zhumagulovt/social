@@ -1,0 +1,13 @@
+{% autoescape off %}
+<h3>
+    Hi {{ user.username }},
+</h3>
+
+Link for activaation
+<br><br>
+<a href="{{ protocol }}://{{ domain }}/?uid={{uid}}&token={{token}}">{{ protocol }}://{{ domain }}/?uid={{uid}}&token={{token}}</a>
+<br><br>
+If clicking the link above doesn't work, please copy and paste the URL in a new browser
+window instead.
+
+{% endautoescape %}
