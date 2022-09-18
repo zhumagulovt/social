@@ -12,6 +12,7 @@ from rest_framework.settings import api_settings
 
 from accounts.models import UserFollowing
 from posts.models import Post
+from posts.usecases import get_posts_with_optimization
 
 User = get_user_model()
 
@@ -253,7 +254,8 @@ class UserDetailSerializer(serializers.ModelSerializer):
         ]
 
     def get_posts(self, obj):
-        return UserPostSerializer(obj.posts, many=True).data
+        queryset = get_posts_with_optimization(user=obj)
+        return UserPostSerializer(queryset, many=True).data
 
     def get_followers_count(self, obj):
         return obj.followers.count()

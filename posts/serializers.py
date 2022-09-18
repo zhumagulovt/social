@@ -78,8 +78,8 @@ class PostDetailSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
             'images',
-            'comments_count',
             'likes_count',
+            'comments_count',
             'comments'
         ]
     
