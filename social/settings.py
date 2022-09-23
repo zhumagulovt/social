@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-$zbdeoso4uur)swcfq&$4$$9)rcdb$0d#1z92)eiyk1ku+l$a8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -48,10 +48,12 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
-    "debug_toolbar",
+    'debug_toolbar',
+    'channels',
     
     'accounts',
-    'posts'
+    'posts',
+    'chat'
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
@@ -87,7 +89,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'social.wsgi.application'
-
+ASGI_APPLICATION = 'social.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -156,6 +158,12 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
 ]
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
