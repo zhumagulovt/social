@@ -6,7 +6,7 @@ This backend provides:
   - User's following system
   - User's feedback by followings
   - Likes, comments for each post
-
+  - Real time chat of two users
   
 # Running the server
 If you wish to run the server, the first step is [installing Python](https://www.python.org/downloads/).
