@@ -1,5 +1,8 @@
 import json
+
 from channels.generic.websocket import AsyncWebsocketConsumer
+
+from .services import create_new_message, get_user_by_pk
  
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -13,7 +16,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def disconnect(self , close_code):
         await self.channel_layer.group_discard(
             self.group_name ,
-            self.channel_layer
+            self.channel_name
         )
 
     async def receive(self, text_data):
@@ -28,6 +31,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 "username": user.username,
                 "message" : message,
             })
+        recipient = await get_user_by_pk(send_to)
+
+        if not recipient:
+            return "There is no user"
+        else:
+            await create_new_message(user, recipient, message)
 
     async def send_message(self, event) :
         message = event["message"]

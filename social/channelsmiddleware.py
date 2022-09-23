@@ -37,8 +37,10 @@ class JWTAuthMiddleware(BaseMiddleware):
         # Close old database connections
         close_old_connections()
 
-        token = parse_qs(scope['query_string'].decode('utf-8'))['token'][0]
-
+        try:
+            token = parse_qs(scope['query_string'].decode('utf-8'))['token'][0]
+        except KeyError:
+            return None
         # Authenticate user
         try:
             # Check and validate token
