@@ -1,12 +1,9 @@
 from rest_framework import status
-from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate, APIClient
+from rest_framework.test import APITestCase
 
 from django.contrib.auth import get_user_model
 
-from .views import FollowingFeedView
 from .models import Post
-
-from accounts.models import UserFollowing
 
 User = get_user_model()
 
