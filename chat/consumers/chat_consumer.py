@@ -2,7 +2,7 @@ import json
 
 from channels.generic.websocket import AsyncWebsocketConsumer
 
-from .services import create_new_message, get_user_by_pk
+from .db_usecases import create_new_message, get_user_by_pk
  
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
