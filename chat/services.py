@@ -30,3 +30,15 @@ def get_all_messages(user1, user2):
     ).select_related('sender', 'recipient')
 
     return messages
+
+def get_other_user_in_chat(user, chat):
+    """Get second user in chat"""
+    other_user = chat.user2 if chat.user2 != user else chat.user1
+    return other_user
+
+def get_last_message(user1, user2):
+    message = Message.objects.filter(
+        Q(sender=user1, recipient=user2) | Q(sender=user2, recipient=user1)
+    ).select_related('sender', 'recipient').first()
+
+    return message
