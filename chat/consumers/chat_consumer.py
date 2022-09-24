@@ -24,6 +24,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = text_data_json['message']
         user = self.scope['user']
         send_to = text_data_json['send_to']
+        
+        if user.pk == send_to:
+            return "User can't send message himself"
 
         await self.channel_layer.group_send(
             str(send_to),{

@@ -24,23 +24,9 @@ def get_all_chats(user):
 
     return chats
 
-@database_sync_to_async
-def create_new_message(sender, recipient, text):
-    """Create new message"""
-    create_chat_if_not_exists(sender, recipient)
-    return Message.objects.create(
-        sender=sender,
-        recipient=recipient,
-        text=text
-    )
-
 def get_all_messages(user1, user2):
     messages = Message.objects.filter(
         Q(sender=user1, recipient=user2) | Q(sender=user2, recipient=user1)
     ).select_related('sender', 'recipient')
 
     return messages
-
-@database_sync_to_async
-def get_user_by_pk(pk):
-    return User.objects.filter(pk=pk).first()

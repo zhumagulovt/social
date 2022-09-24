@@ -11,6 +11,9 @@ class Chat(models.Model):
     user2 = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="User2",
                               related_name="+")
 
+    def __str__(self):
+        return f"{self.user1} <-> {self.user2}"
+
     class Meta:
         unique_together = (('user1', 'user2'), ('user2', 'user1'))
         verbose_name = "Чат"
