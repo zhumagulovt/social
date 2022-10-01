@@ -10,7 +10,6 @@ from django.forms import ValidationError
 from rest_framework import serializers
 from rest_framework.settings import api_settings
 
-from accounts.models import UserFollowing
 from posts.models import Post
 from posts.usecases import get_posts_with_optimization
 
@@ -260,7 +259,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
     def get_is_following(self, obj):
         user = self.context['request'].user
         if user.is_authenticated:
-            if UserFollowing.objects.filter(user=user,following=obj).exists():
+            if obj in user.following.all():
                 return True
         return False
 

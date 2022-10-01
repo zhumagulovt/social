@@ -5,7 +5,6 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 
 from ..serializers import UserDetailSerializer, UserEditSerializer
-from ..models import UserFollowing
 
 User = get_user_model()
 

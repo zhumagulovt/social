@@ -6,6 +6,10 @@ from django.contrib.auth.models import AbstractUser, UserManager
 
 class CustomUserManager(UserManager):
     def create_user(self, username, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('The given email must be set')
+        email = self.normalize_email(email)
+        
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
         extra_fields.setdefault("is_active", False)
@@ -21,18 +25,9 @@ class CustomUser(AbstractUser):
         }
         )
     avatar = models.ImageField(default="avatars/default.jpg", upload_to="avatars/")
+    following = models.ManyToManyField('self', related_name="followers", symmetrical=False, blank=True)
     objects = CustomUserManager()
 
     def __str__(self):
         return self.username
 
-
-class UserFollowing(models.Model):
-    user = models.ForeignKey(CustomUser, related_name='following', on_delete=models.CASCADE)
-    following = models.ForeignKey(CustomUser, related_name='followers', on_delete=models.CASCADE)
-
-    class Meta:
-        unique_together = ['user', 'following']
-
-    def __str__(self):
-        return f"{self.user} -> {self.following}"

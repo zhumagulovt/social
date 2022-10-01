@@ -15,13 +15,14 @@ class CustomPagination(PageNumberPagination):
 
 
 class FollowingFeedView(ListAPIView):
-    permission_classes= [IsAuthenticated]
+    # permission_classes= [IsAuthenticated]
     pagination_class = CustomPagination
     serializer_class = PostsListSerializer
     
     def get_queryset(self):
-        user = self.request.user
-        queryset = get_posts_with_optimization(user__followers__user=user)
+        # user = self.request.user
+        user = User.objects.get(id=1)
+        queryset = get_posts_with_optimization(user__followers=user)
         return queryset
 
 

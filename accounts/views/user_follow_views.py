@@ -5,7 +5,6 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 
 from ..serializers import *
-from ..models import UserFollowing
 
 User = get_user_model()
 
@@ -21,12 +20,12 @@ class UserFollowView(APIView):
         if user == to_follow:
             return Response("User can't follow himself", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        if UserFollowing.objects.filter(user=user, following=to_follow).exists():
+        if to_follow in user.following.all():
             # unfollow
-            UserFollowing.objects.filter(user=user, following=to_follow).delete()
+            user.following.remove(to_follow)
         else:
             # follow
-            UserFollowing.objects.create(user=user, following=to_follow)
+            user.following.add(to_follow)
 
         return Response(status=status.HTTP_200_OK)
 
