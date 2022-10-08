@@ -2,7 +2,12 @@ import json
 
 from channels.generic.websocket import AsyncWebsocketConsumer
 
-from .db_usecases import create_new_message, get_user_by_pk
+from .db_usecases import (
+    create_new_message, 
+    get_message_recipient, 
+    get_user_by_pk, 
+    make_message_read
+)
  
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -19,27 +24,52 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
 
+    async def handle_action(self, action_type, data):
+        if action_type == 'send_message':
+            message = data['message']
+            user = self.scope['user']
+            send_to = data['send_to']
+
+            if user.pk == send_to:
+                return ""
+            await self.channel_layer.group_send(
+                str(send_to), {
+                    "type" : "send_message",
+                    "username": user.username,
+                    "message" : message,
+                }
+            )
+
+            recipient = await get_user_by_pk(send_to)
+
+            if not recipient:
+                return "There is no user"
+
+            else:
+                await create_new_message(user, recipient, message)
+
+        elif action_type == 'read_message':
+            message_id = data['message_id']
+            # user_id = data['user_id']
+            user = self.scope['user']
+            # if get_user_by_pk(user_id) != None:
+            recipient = await get_message_recipient(message_id)
+            print(recipient)
+            if recipient:
+                # print(message)
+                if recipient == user:
+                    await make_message_read(message_id)
+
+
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-        user = self.scope['user']
-        send_to = text_data_json['send_to']
-        
-        if user.pk == send_to:
-            return "User can't send message himself"
 
-        await self.channel_layer.group_send(
-            str(send_to),{
-                "type" : "send_message",
-                "username": user.username,
-                "message" : message,
-            })
-        recipient = await get_user_by_pk(send_to)
-
-        if not recipient:
-            return "There is no user"
+        if not ("type" in text_data_json):
+            await self.send(text_data="action type should be set")
         else:
-            await create_new_message(user, recipient, message)
+            await self.handle_action(text_data_json['type'], text_data_json)
+        # action_type = text_data_json['type']
+        
 
     async def send_message(self, event) :
         message = event["message"]

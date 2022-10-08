@@ -46,6 +46,13 @@ def get_user_by_pk(pk):
     return User.objects.filter(pk=pk).first()
 
 @database_sync_to_async
+def get_message_recipient(pk):
+    message = Message.objects.filter(pk=pk).first()
+    if message:
+        return message.recipient
+    return None
+
+@database_sync_to_async
 def make_message_read(pk):
     message = Message.objects.filter(
         pk=pk
