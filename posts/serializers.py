@@ -39,7 +39,7 @@ class PostsListSerializer(serializers.ModelSerializer):
     def get_image(self, obj):
         img = obj.images.all()[:1]
         if img:
-            return img[0].image.url
+            return "http://localhost:8000" + str(img[0].image.url)
         return None
 
     def get_likes_count(self, obj):

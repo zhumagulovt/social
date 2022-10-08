@@ -1,10 +1,10 @@
 from django.db import models
 
-from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser, UserManager
 
 
 class CustomUserManager(UserManager):
+
     def create_user(self, username, email, password=None, **extra_fields):
         if not email:
             raise ValueError('The given email must be set')
@@ -17,6 +17,9 @@ class CustomUserManager(UserManager):
 
 
 class CustomUser(AbstractUser):
+    """
+    Custom user with unique email and username
+    """
     email = models.EmailField(
         "email address", 
         unique=True,
