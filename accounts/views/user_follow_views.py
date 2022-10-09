@@ -1,8 +1,11 @@
 from django.contrib.auth import get_user_model
+
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+
+from drf_spectacular.utils import extend_schema
 
 from ..serializers import *
 
@@ -12,7 +15,10 @@ User = get_user_model()
 class UserFollowView(APIView):
     """View for follow or unfollow from user"""
     permission_classes = [IsAuthenticated]
-
+    @extend_schema(
+        request=None,
+        responses=None
+    )
     def post(self, request, username):
         user = request.user
         to_follow = User.objects.get(username=username)

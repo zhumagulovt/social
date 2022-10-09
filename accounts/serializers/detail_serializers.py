@@ -83,10 +83,9 @@ class UserDetailSerializer(serializers.ModelSerializer):
             'posts'
         ]
 
-    def get_posts(self, obj) -> ReturnList:
+    def get_posts(self, obj) -> list:
         queryset = get_posts_with_optimization(user=obj)
         data = UserPostSerializer(queryset, many=True).data
-        print(type(data))
 
         return data
 

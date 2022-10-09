@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 
+from drf_spectacular.utils import extend_schema
+
 from ..utils import send_confirmation_link
 from ..serializers import *
 
@@ -14,6 +16,10 @@ class UserChangePasswordAPIView(APIView):
     
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        request=UserChangePasswordSerializer,
+        responses=None
+    )
     def post(self, request):
         data = request.data
         user = request.user
@@ -31,6 +37,10 @@ class UserChangePasswordAPIView(APIView):
 
 class UserResetPasswordAPIView(APIView):
 
+    @extend_schema(
+        request=UserResetPasswordSerializer,
+        responses=None
+    )
     def post(self, request):
         data = request.data
         serializer = UserResetPasswordSerializer(data=data)
@@ -50,7 +60,10 @@ class UserResetPasswordAPIView(APIView):
 
 
 class UserResetPasswordCompleteAPIView(APIView):
-
+    @extend_schema(
+        request=UserResetPasswordCompleteSerializer,
+        responses=None
+    )
     def post(self, request):
         data = request.data
         serializer = UserResetPasswordCompleteSerializer(data=data)
