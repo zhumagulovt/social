@@ -10,12 +10,15 @@ User = get_user_model()
 
 
 class UserDetailView(generics.RetrieveAPIView):
+    """Get detail info about user"""
     lookup_field = "username"
     serializer_class = UserDetailSerializer
     queryset = User.objects.all()
 
 
 class UserEditView(generics.UpdateAPIView):
+    """Edit user"""
+
     permission_classes = [IsAuthenticated]
     serializer_class = UserEditSerializer
 
@@ -24,6 +27,7 @@ class UserEditView(generics.UpdateAPIView):
 
 
 class UserDeleteAvatarView(APIView):
+    """View for deleting profile picture"""
     permission_classes = [IsAuthenticated]
 
     def post(self, request):

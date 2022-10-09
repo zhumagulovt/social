@@ -10,7 +10,7 @@ User = get_user_model()
 
 
 class UserFollowView(APIView):
-    
+    """View for follow or unfollow from user"""
     permission_classes = [IsAuthenticated]
 
     def post(self, request, username):
@@ -31,6 +31,7 @@ class UserFollowView(APIView):
 
 
 class UserFollowingListView(generics.ListAPIView):
+    """View for getting list of followings"""
 
     serializer_class = UserSerializer
 
@@ -41,6 +42,7 @@ class UserFollowingListView(generics.ListAPIView):
 
 
 class UserFollowerListView(generics.ListAPIView):
+    """View for getting list of followers"""
 
     serializer_class = UserSerializer
 

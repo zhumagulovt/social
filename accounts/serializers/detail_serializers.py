@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 
 from rest_framework import serializers
+from rest_framework.utils.serializer_helpers import ReturnList
 
 from posts.models import Post
 from posts.usecases import get_posts_with_optimization
@@ -82,24 +83,27 @@ class UserDetailSerializer(serializers.ModelSerializer):
             'posts'
         ]
 
-    def get_posts(self, obj):
+    def get_posts(self, obj) -> ReturnList:
         queryset = get_posts_with_optimization(user=obj)
-        return UserPostSerializer(queryset, many=True).data
+        data = UserPostSerializer(queryset, many=True).data
+        print(type(data))
 
-    def get_followers_count(self, obj):
+        return data
+
+    def get_followers_count(self, obj) -> int:
         return obj.followers.count()
 
-    def get_following_count(self, obj):
+    def get_following_count(self, obj) -> int:
         return obj.following.count()
     
-    def get_is_following(self, obj):
+    def get_is_following(self, obj) -> bool:
         user = self.context['request'].user
         if user.is_authenticated:
             if obj in user.following.all():
                 return True
         return False
 
-    def get_posts_count(self, obj):
+    def get_posts_count(self, obj) -> int:
         return obj.posts.count()
 
 

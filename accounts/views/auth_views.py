@@ -3,13 +3,16 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
+from drf_spectacular.types import OpenApiTypes
+
 from ..serializers import *
 
 User = get_user_model()
 
 
 class RegistrationAPIView(APIView):
-    
+    """View for registration user"""
     def post(self, request):
         data = request.data
         serializer = UserRegistrationSerializer(data=data)
@@ -24,7 +27,13 @@ class RegistrationAPIView(APIView):
 
 
 class UserActivateAPIView(APIView):
-    
+    """View for activate new user with code from email"""
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(name='uid', required=True),
+            OpenApiParameter(name='token', required=True)
+        ]
+    )
     def post(self, request):
         data = request.data
         
