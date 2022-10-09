@@ -1,7 +1,6 @@
 from django.contrib.auth import get_user_model
 
 from rest_framework.exceptions import ValidationError
-from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -11,14 +10,11 @@ from .services import get_all_chats, get_all_messages, \
 
 from .serializers import ChatSerializer, ChatDetailSerializer
 
-# @api_view(["POST"])
-# def create_or_join_chat(request):
-#     user = request.user
-#     chat_to = request.data['chat_to']
 User = get_user_model()
 
 
 class ChatListAPIView(APIView):
+    """Get all chats of current user"""
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
@@ -36,6 +32,7 @@ class ChatListAPIView(APIView):
 
 
 class ChatDetailAPIView(APIView):
+    """Get chat with user"""
     permission_classes = [IsAuthenticated]
 
     def get(self, request, pk):

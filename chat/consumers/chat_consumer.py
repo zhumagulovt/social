@@ -10,6 +10,7 @@ from .db_usecases import (
 )
  
 class ChatConsumer(AsyncWebsocketConsumer):
+    """Consumer for receive and send messages"""
     async def connect(self):
         self.group_name = str(self.scope['user'].pk)
         await self.channel_layer.group_add(
@@ -50,13 +51,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         elif action_type == 'read_message':
             message_id = data['message_id']
-            # user_id = data['user_id']
             user = self.scope['user']
-            # if get_user_by_pk(user_id) != None:
             recipient = await get_message_recipient(message_id)
-            print(recipient)
             if recipient:
-                # print(message)
                 if recipient == user:
                     await make_message_read(message_id)
 
@@ -68,7 +65,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             await self.send(text_data="action type should be set")
         else:
             await self.handle_action(text_data_json['type'], text_data_json)
-        # action_type = text_data_json['type']
         
 
     async def send_message(self, event) :
