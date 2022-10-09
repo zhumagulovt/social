@@ -7,6 +7,8 @@ This backend provides:
   - User's feedback by followings
   - Likes, comments for each post
   - Real time chat of two users
+  - Sending confirmation email after registration
+  - Sending confirmation email for change password
   
 # Running the server
 If you wish to run the server, the first step is [installing Python](https://www.python.org/downloads/).
