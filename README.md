@@ -1,7 +1,6 @@
 # REST API Backend for social network app or website
 
 This backend provides:
-  - Beautiful admin page created by using django-jazzmin
   - JWT authentication
   - User's following system
   - User's feedback by followings
@@ -9,7 +8,8 @@ This backend provides:
   - Real time chat of two users
   - Sending confirmation email after registration
   - Sending confirmation email for change password
-  
+  - OpenAPI documentation
+
 # Running the server
 If you wish to run the server, the first step is [installing Python](https://www.python.org/downloads/).
 
@@ -36,6 +36,6 @@ Run
 python3 manage.py runserver
 ```
 
-All queries to db are optimized.
+
 
 This project is developed in Python using Django and djangorestframework
