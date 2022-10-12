@@ -11,19 +11,17 @@ User = get_user_model()
 
 def send_confirmation_link(template, user, path, title):
 
-    html_message = render_to_string(template, {
-        "user": user,
-        "protocol": "http",
-        "domain": f"localhost:3000/{path}",
-        "uid": urlsafe_base64_encode(force_bytes(user.pk)),
-        "token": default_token_generator.make_token(user)
-    })
-
-    message = EmailMessage(
-        title,
-        html_message,
-        "example@example.com",
-        [user.email]
+    html_message = render_to_string(
+        template,
+        {
+            "user": user,
+            "protocol": "http",
+            "domain": f"localhost:3000/{path}",
+            "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+            "token": default_token_generator.make_token(user),
+        },
     )
-    message.content_subtype = 'html'
+
+    message = EmailMessage(title, html_message, "example@example.com", [user.email])
+    message.content_subtype = "html"
     message.send()

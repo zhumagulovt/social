@@ -14,17 +14,19 @@ User = get_user_model()
 
 class UserFollowView(APIView):
     """View for follow or unfollow from user"""
+
     permission_classes = [IsAuthenticated]
-    @extend_schema(
-        request=None,
-        responses=None
-    )
+
+    @extend_schema(request=None, responses=None)
     def post(self, request, username):
         user = request.user
         to_follow = User.objects.get(username=username)
 
         if user == to_follow:
-            return Response("User can't follow himself", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(
+                "User can't follow himself",
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
 
         if to_follow in user.following.all():
             # unfollow
@@ -42,7 +44,7 @@ class UserFollowingListView(generics.ListAPIView):
     serializer_class = UserSerializer
 
     def get_queryset(self):
-        user = User.objects.get(username=self.kwargs.get('username'))
+        user = User.objects.get(username=self.kwargs.get("username"))
         queryset = User.objects.filter(followers__user=user)
         return queryset
 
@@ -53,8 +55,8 @@ class UserFollowerListView(generics.ListAPIView):
     serializer_class = UserSerializer
 
     def get_queryset(self):
-        
-        user = User.objects.get(username=self.kwargs.get('username'))
+
+        user = User.objects.get(username=self.kwargs.get("username"))
         # in models user's related name is following
         queryset = User.objects.filter(following__following=user)
         return queryset

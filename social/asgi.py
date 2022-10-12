@@ -11,6 +11,7 @@ import os
 
 from django.urls import path
 from channels.routing import ProtocolTypeRouter, URLRouter
+
 # from channels.auth import AuthMiddlewareStack
 from channels.security.websocket import AllowedHostsOriginValidator
 
@@ -18,15 +19,15 @@ from chat import routing
 
 from .channelsmiddleware import JWTAuthMiddlewareStack
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'social.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "social.settings")
 
-application = ProtocolTypeRouter({ 
-    # Websocket чат
-    'websocket': AllowedHostsOriginValidator(  # Only allow socket connections from the Allowed hosts in the settings.py file
-        JWTAuthMiddlewareStack(  # Кастомная JWT авторизация
-            URLRouter(
-                routing.websocket_urlpatterns
-            )
+application = ProtocolTypeRouter(
+    {
+        # Websocket чат
+        "websocket": AllowedHostsOriginValidator(  # Only allow socket connections from the Allowed hosts in the settings.py file
+            JWTAuthMiddlewareStack(  # Кастомная JWT авторизация
+                URLRouter(routing.websocket_urlpatterns)
+            ),
         ),
-    ),
-})
+    }
+)

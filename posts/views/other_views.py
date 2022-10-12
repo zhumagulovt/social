@@ -12,14 +12,14 @@ from ..usecases import delete_or_create_user_m2m_post_model
 
 class LikeView(APIView):
     permission_classes = [IsAuthenticated]
-    
+
     def post(self, request, pk):
-        
+
         post = Post.objects.get(pk=pk)
         user = request.user
 
-        delete_or_create_user_m2m_post_model(Like, user, post)        
-        
+        delete_or_create_user_m2m_post_model(Like, user, post)
+
         return Response(status=status.HTTP_200_OK)
 
 
@@ -28,8 +28,8 @@ class CommentCreateView(APIView):
 
     def post(self, request, pk):
         data = request.data
-        data['post'] = pk
-        data['user'] = request.user.pk
+        data["post"] = pk
+        data["user"] = request.user.pk
         serializer = CommentSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             Comment.objects.create(**serializer.validated_data)
@@ -43,11 +43,11 @@ class CommentDeleteView(DestroyAPIView):
 
 class SavedView(APIView):
     permission_classes = [IsAuthenticated]
-    
+
     def post(self, request, pk):
         post = Post.objects.get(pk=pk)
         user = request.user
 
         delete_or_create_user_m2m_post_model(Saved, user, post)
-        
+
         return Response(status=status.HTTP_200_OK)

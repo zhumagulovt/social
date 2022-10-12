@@ -5,8 +5,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .services import get_all_chats, get_all_messages, \
-    get_last_message, get_other_user_in_chat, create_chat_if_not_exists
+from .services import (
+    get_all_chats,
+    get_all_messages,
+    get_last_message,
+    get_other_user_in_chat,
+    create_chat_if_not_exists,
+)
 
 from .serializers import ChatSerializer, ChatDetailSerializer
 
@@ -15,6 +20,7 @@ User = get_user_model()
 
 class ChatListAPIView(APIView):
     """Get all chats of current user"""
+
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
@@ -24,8 +30,8 @@ class ChatListAPIView(APIView):
         for chat in chats:
             user2 = get_other_user_in_chat(request.user, chat)
             last_message = get_last_message(request.user, user2)
-            
-            serializer = ChatSerializer({'user': user2, 'last_message': last_message})
+
+            serializer = ChatSerializer({"user": user2, "last_message": last_message})
             result.append(serializer.data)
 
         return Response({"chats": result})
@@ -33,6 +39,7 @@ class ChatListAPIView(APIView):
 
 class ChatDetailAPIView(APIView):
     """Get chat with user"""
+
     permission_classes = [IsAuthenticated]
 
     def get(self, request, pk):
@@ -45,7 +52,7 @@ class ChatDetailAPIView(APIView):
 
             messages = get_all_messages(request.user, user2)
 
-            serializer = ChatDetailSerializer({'user': user2, 'messages': messages})
+            serializer = ChatDetailSerializer({"user": user2, "messages": messages})
 
             return Response(serializer.data)
 

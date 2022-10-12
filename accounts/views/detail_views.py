@@ -14,6 +14,7 @@ User = get_user_model()
 
 class UserDetailView(generics.RetrieveAPIView):
     """Get detail info about user"""
+
     lookup_field = "username"
     serializer_class = UserDetailSerializer
     queryset = User.objects.all()
@@ -31,11 +32,10 @@ class UserEditView(generics.UpdateAPIView):
 
 class UserDeleteAvatarView(APIView):
     """View for deleting profile picture"""
+
     permission_classes = [IsAuthenticated]
-    @extend_schema(
-        request=None,
-        responses=None
-    )
+
+    @extend_schema(request=None, responses=None)
     def post(self, request):
         user = request.user
         user.avatar = "avatars/default.jpg"

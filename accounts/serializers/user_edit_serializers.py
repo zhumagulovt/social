@@ -17,21 +17,21 @@ class UserChangePasswordSerializer(serializers.Serializer):
     new_password = serializers.CharField(required=True)
 
     def validate(self, data):
-        current_password = data.get('current_password')
-        new_password = data.get('new_password')
+        current_password = data.get("current_password")
+        new_password = data.get("new_password")
 
-        user = self.context.get('user')
-        
+        user = self.context.get("user")
+
         if not user.check_password(current_password):
             raise serializers.ValidationError(
                 {"current_password": "Current password is invalid"}
             )
-        
+
         if current_password == new_password:
             raise serializers.ValidationError(
                 {"new_password": "New password is similar to current"}
             )
-        
+
         # password validation
         try:
             validate_password(new_password, user)
@@ -50,10 +50,8 @@ class UserResetPasswordSerializer(serializers.Serializer):
 
     def validate(self, data):
 
-        if not User.objects.filter(email=data.get('email')).exists():
-            raise serializers.ValidationError(
-                {"email": "Invalid email"}
-            )
+        if not User.objects.filter(email=data.get("email")).exists():
+            raise serializers.ValidationError({"email": "Invalid email"})
 
         return data
 
@@ -66,23 +64,23 @@ class UserResetPasswordCompleteSerializer(serializers.Serializer):
 
     def validate(self, data):
 
-        password = data.get('password')
-        password_confirm = data.get('password_confirm')
+        password = data.get("password")
+        password_confirm = data.get("password_confirm")
 
         # decode base64 encoded uid to user id
         try:
-            uid = force_str(urlsafe_base64_decode(data.get('uid')))
- 
+            uid = force_str(urlsafe_base64_decode(data.get("uid")))
+
             user = User.objects.get(pk=uid)
 
             # add the user to data, whose password needs to be reset
             # we need to get user in views
-            data['user'] = user
+            data["user"] = user
 
         except BaseException as e:
             raise ValidationError("Invalid uid")
 
-        if not default_token_generator.check_token(user=user, token=data.get('token')):
+        if not default_token_generator.check_token(user=user, token=data.get("token")):
             raise serializers.ValidationError({"token": "Invalid token"})
 
         # password validation
@@ -93,7 +91,7 @@ class UserResetPasswordCompleteSerializer(serializers.Serializer):
             raise serializers.ValidationError(
                 {"password": serializer_error[api_settings.NON_FIELD_ERRORS_KEY]}
             )
-        
+
         # password confirm validation
         if password != password_confirm:
             raise serializers.ValidationError({"passwords aren't match"})

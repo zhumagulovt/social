@@ -9,9 +9,9 @@ class Post(models.Model):
     user = models.ForeignKey(User, related_name="posts", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     class Meta:
-        ordering = ['-created_at']
+        ordering = ["-created_at"]
 
 
 class PostImage(models.Model):
@@ -27,7 +27,7 @@ class Comment(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ["-created_at"]
 
 
 class Like(models.Model):
@@ -35,7 +35,7 @@ class Like(models.Model):
     user = models.ForeignKey(User, related_name="likes", on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = ['post', 'user']
+        unique_together = ["post", "user"]
 
 
 class Saved(models.Model):
@@ -43,4 +43,4 @@ class Saved(models.Model):
     user = models.ForeignKey(User, related_name="saved", on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = ['post', 'user']
+        unique_together = ["post", "user"]

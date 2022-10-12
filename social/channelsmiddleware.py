@@ -16,13 +16,14 @@ from urllib.parse import parse_qs
 
 User = get_user_model()
 
+
 @database_sync_to_async
 def get_user(validated_token):
     try:
-        user = User.objects.get(id=validated_token['user_id'])
+        user = User.objects.get(id=validated_token["user_id"])
         # print(user)
         return user
-    
+
     except User.DoesNotExist:
         return AnonymousUser()
 
@@ -33,12 +34,12 @@ class JWTAuthMiddleware(BaseMiddleware):
         self.inner = inner
 
     async def __call__(self, scope, receive, send):
-        
+
         # Close old database connections
         close_old_connections()
 
         try:
-            token = parse_qs(scope['query_string'].decode('utf-8'))['token'][0]
+            token = parse_qs(scope["query_string"].decode("utf-8"))["token"][0]
         except KeyError:
             return None
         # Authenticate user
@@ -52,8 +53,8 @@ class JWTAuthMiddleware(BaseMiddleware):
 
         else:
             # Token is valid
-            decoded_data = jwt_decode(token, settings.SECRET_KEY, algorithms=['HS256'])
-            scope['user'] = await get_user(validated_token=decoded_data)
+            decoded_data = jwt_decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+            scope["user"] = await get_user(validated_token=decoded_data)
 
         return await super().__call__(scope, receive, send)
 

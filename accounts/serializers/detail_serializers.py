@@ -11,12 +11,13 @@ User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for short information about user"""
+
     class Meta:
         model = User
         fields = [
-            'id',
-            'username',
-            'avatar',
+            "id",
+            "username",
+            "avatar",
         ]
 
     def get_followers_count(self, obj):
@@ -28,6 +29,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserPostSerializer(serializers.ModelSerializer):
     """Duplicate serializer for Post model to avoid circular import from posts app"""
+
     content = serializers.SerializerMethodField()
     image = serializers.SerializerMethodField(read_only=True)
     likes_count = serializers.SerializerMethodField(read_only=True)
@@ -36,15 +38,15 @@ class UserPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = [
-            'id',
-            'content',
-            'created_at',
-            'updated_at',
-            'image',
-            'likes_count',
-            'comments_count'
+            "id",
+            "content",
+            "created_at",
+            "updated_at",
+            "image",
+            "likes_count",
+            "comments_count",
         ]
-    
+
     def get_content(self, obj):
         return obj.content[:80]
 
@@ -56,13 +58,14 @@ class UserPostSerializer(serializers.ModelSerializer):
 
     def get_likes_count(self, obj):
         return obj.likes.count()
-    
+
     def get_comments_count(self, obj):
         return obj.comments.count()
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
     """Serializer for user with all fields and posts"""
+
     followers_count = serializers.SerializerMethodField(read_only=True)
     following_count = serializers.SerializerMethodField(read_only=True)
     posts_count = serializers.SerializerMethodField(read_only=True)
@@ -72,15 +75,15 @@ class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            'id',
-            'username',
-            'avatar',
-            'email',
-            'posts_count',
-            'followers_count',
-            'following_count',
-            'is_following',
-            'posts'
+            "id",
+            "username",
+            "avatar",
+            "email",
+            "posts_count",
+            "followers_count",
+            "following_count",
+            "is_following",
+            "posts",
         ]
 
     def get_posts(self, obj) -> list:
@@ -94,9 +97,9 @@ class UserDetailSerializer(serializers.ModelSerializer):
 
     def get_following_count(self, obj) -> int:
         return obj.following.count()
-    
+
     def get_is_following(self, obj) -> bool:
-        user = self.context['request'].user
+        user = self.context["request"].user
         if user.is_authenticated:
             if obj in user.following.all():
                 return True
@@ -107,14 +110,9 @@ class UserDetailSerializer(serializers.ModelSerializer):
 
 
 class UserEditSerializer(serializers.ModelSerializer):
-    
     class Meta:
         model = User
-        fields = [
-            'username',
-            'email',
-            'avatar'
-        ]
+        fields = ["username", "email", "avatar"]
 
     def update(self, instance, validated_data):
         return super().update(instance, validated_data)

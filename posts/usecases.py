@@ -5,20 +5,16 @@ from .models import Post
 
 User = get_user_model()
 
+
 def get_posts_with_optimization(**kwargs):
     """Get posts with filter and optimize by all reverse fields"""
-    queryset = Post.objects.filter(
-            **kwargs
-        ).select_related(
-            'user'
-        ).prefetch_related(
-            'images', 
-            'comments', 
-            'likes', 
-            'saved', 
-            'user__following', 
-            'user__followers'
+    queryset = (
+        Post.objects.filter(**kwargs)
+        .select_related("user")
+        .prefetch_related(
+            "images", "comments", "likes", "saved", "user__following", "user__followers"
         )
+    )
     return queryset
 
 
