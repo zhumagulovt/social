@@ -110,8 +110,8 @@ class PostCreateSerializer(serializers.ModelSerializer):
 
 class CommentCreateSerializer(serializers.ModelSerializer):
 
-    user = UserSerializer(read_only=True)
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Comment
-        fields = ["content"]
+        fields = ["user", "content"]

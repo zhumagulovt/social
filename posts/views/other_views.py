@@ -1,8 +1,10 @@
-from rest_framework.generics import DestroyAPIView
+from rest_framework.generics import DestroyAPIView, CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+
+from drf_spectacular.utils import extend_schema
 
 from ..models import *
 from ..serializers import *
@@ -23,16 +25,15 @@ class LikeView(APIView):
         return Response(status=status.HTTP_200_OK)
 
 
-class CommentCreateView(APIView):
+class CommentCreate(CreateAPIView):
     permission_classes = [IsAuthenticated]
+    serializer_class = CommentCreateSerializer
+    queryset = Comment.objects.all()
 
-    def post(self, request, pk):
-        data = request.data
-        data["post"] = pk
-        data["user"] = request.user.pk
-        serializer = CommentSerializer(data=data)
-        if serializer.is_valid(raise_exception=True):
-            Comment.objects.create(**serializer.validated_data)
+    def perform_create(self, serializer):
+        serializer.save(
+            post_id=self.kwargs.get("pk")
+        )
 
 
 class CommentDeleteView(DestroyAPIView):

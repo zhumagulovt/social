@@ -5,6 +5,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from drf_spectacular.utils import extend_schema
+
 from .services import (
     get_all_chats,
     get_all_messages,
@@ -23,6 +25,7 @@ class ChatListAPIView(APIView):
 
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(request=None, responses=ChatSerializer)
     def get(self, request):
         result = []
         chats = get_all_chats(request.user)
@@ -42,14 +45,13 @@ class ChatDetailAPIView(APIView):
 
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(request=None, responses=ChatDetailSerializer)
     def get(self, request, pk):
 
         user2 = User.objects.filter(pk=pk).first()
 
         if user2 and user2 != request.user:
-
             create_chat_if_not_exists(request.user, user2)
-
             messages = get_all_messages(request.user, user2)
 
             serializer = ChatDetailSerializer({"user": user2, "messages": messages})
