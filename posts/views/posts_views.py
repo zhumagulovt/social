@@ -51,3 +51,12 @@ class UserSavedList(ListAPIView):
         user = self.request.user
         queryset = get_posts_with_optimization(saved__user=user)
         return queryset
+
+class PostSearch(ListAPIView):
+    serializer_class = PostsListSerializer
+
+    def get_queryset(self):
+        q = self.request.query_params['q']
+        if q != '':
+            return get_posts_with_optimization(content__icontains=q)
+        return []

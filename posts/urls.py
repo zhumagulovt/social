@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
     path("", views.PostCreateView.as_view()),
+    path("search/", views.PostSearch.as_view()),
     path("feed/", views.FollowingFeedView.as_view()),
     path("saved/", views.UserSavedList.as_view()),
     path("<int:pk>/", views.PostDetailDeleteView.as_view()),
