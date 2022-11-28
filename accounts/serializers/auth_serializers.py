@@ -1,3 +1,5 @@
+from typing import TypeVar, Type
+
 from django.core import exceptions
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
@@ -5,12 +7,14 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils import timezone
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
-from django.forms import ValidationError
+from django.db.models.base import Model
 
 from rest_framework import serializers
 from rest_framework.settings import api_settings
 
-User = get_user_model()
+_MT = TypeVar("_MT", bound=Model)  # Model Type
+
+User: Type[_MT] = get_user_model()
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -48,7 +52,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return user
 
 
-class UserActivationSerializer(serializers.Serializer):
+class UserActivationSerializer(serializers.Serializer):  # noqa
     """Serializer for activation user with uid and token"""
 
     uid = serializers.CharField(required=True)
@@ -63,8 +67,12 @@ class UserActivationSerializer(serializers.Serializer):
             data["uid"] = uid
 
             user = User.objects.get(pk=uid)
-        except BaseException as e:
-            raise ValidationError("Invalid uid")
+
+        except User.DoesNotExist:
+            raise serializers.ValidationError({"uid": "No user with this id"})
+
+        except ValueError:
+            raise serializers.ValidationError({"uid": "Invalid uid"})
 
         if not default_token_generator.check_token(user=user, token=data.get("token")):
             raise serializers.ValidationError({"token": "Invalid token"})
