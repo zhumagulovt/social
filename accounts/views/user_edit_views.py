@@ -1,4 +1,3 @@
-from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -40,7 +39,8 @@ class UserResetPasswordAPIView(APIView):
             email = serializer.validated_data.get("email")
             user = User.objects.get(email=email)
             send_confirmation_link(
-                "accounts/reset_password_mail.html", user, "Reset password"
+                "accounts/reset_password_mail.html", user,
+                "accounts/reset-password", "Reset password"
             )
 
             return Response(

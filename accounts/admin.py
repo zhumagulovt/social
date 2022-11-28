@@ -8,9 +8,9 @@ from .models import CustomUser
 class CustomUserAdmin(DjangoUserAdmin):
     fieldsets = (
         (None, {"fields": ("email", "username", "password")}),
-        (("Personal info"), {"fields": ("first_name", "last_name")}),
+        ("Personal info", {"fields": ("first_name", "last_name")}),
         (
-            ("Permissions"),
+            "Permissions",
             {
                 "fields": (
                     "is_active",
@@ -21,7 +21,7 @@ class CustomUserAdmin(DjangoUserAdmin):
                 )
             },
         ),
-        (("Important dates"), {"fields": ("last_login", "date_joined")}),
+        ("Important dates", {"fields": ("last_login", "date_joined")}),
     )
     add_fieldsets = (
         (
@@ -43,4 +43,3 @@ class CustomUserAdmin(DjangoUserAdmin):
     )
     search_fields = ("email", "username", "first_name", "last_name")
     ordering = ("email",)
-    # pass

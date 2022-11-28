@@ -18,13 +18,14 @@ class RegistrationAPIView(APIView):
         data = request.data
         serializer = UserRegistrationSerializer(data=data)
 
-        if serializer.is_valid(raise_exception=True):
-            serializer.create(serializer.validated_data)
+        serializer.is_valid(raise_exception=True)
 
-            return Response(
-                "New user was created. Confirmation link sent to email.",
-                status=status.HTTP_201_CREATED,
-            )
+        serializer.create(serializer.validated_data)
+
+        return Response(
+            "New user was created. Confirmation link sent to email.",
+            status=status.HTTP_201_CREATED,
+        )
 
 
 class UserActivateAPIView(APIView):
@@ -36,7 +37,8 @@ class UserActivateAPIView(APIView):
 
         serializer = UserActivationSerializer(data=data)
 
-        if serializer.is_valid(raise_exception=True):
-            serializer.activate_user()
+        serializer.is_valid(raise_exception=True)
 
-            return Response("Account successfully activated", status=status.HTTP_200_OK)
+        serializer.activate_user()
+
+        return Response("Account successfully activated", status=status.HTTP_200_OK)

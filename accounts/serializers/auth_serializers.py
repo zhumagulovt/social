@@ -52,7 +52,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return user
 
 
-class UserActivationSerializer(serializers.Serializer):  # noqa
+class UserActivationSerializer(serializers.Serializer):
     """Serializer for activation user with uid and token"""
 
     uid = serializers.CharField(required=True)

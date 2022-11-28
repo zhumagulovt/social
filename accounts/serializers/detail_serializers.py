@@ -1,7 +1,6 @@
 from django.contrib.auth import get_user_model
 
 from rest_framework import serializers
-from rest_framework.utils.serializer_helpers import ReturnList
 
 from posts.models import Post
 from posts.usecases import get_posts_with_optimization
@@ -14,16 +13,12 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = [
-            "id",
-            "username",
-            "avatar",
-        ]
+        fields = ["id", "username", "avatar"]
 
-    def get_followers_count(self, obj):
+    def get_followers_count(self, obj) -> int:
         return obj.followers.count()
 
-    def get_following_count(self, obj):
+    def get_following_count(self, obj) -> int:
         return obj.following.count()
 
 
@@ -37,29 +32,22 @@ class UserPostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = [
-            "id",
-            "content",
-            "created_at",
-            "updated_at",
-            "image",
-            "likes_count",
-            "comments_count",
-        ]
+        fields = ["id", "content", "created_at", "updated_at", "image",
+                  "likes_count", "comments_count"]
 
-    def get_content(self, obj):
+    def get_content(self, obj) -> str:
         return obj.content[:80]
 
-    def get_image(self, obj):
+    def get_image(self, obj) -> str | None:
         img = obj.images.all()[:1]
         if img:
             return img[0].image.url
         return None
 
-    def get_likes_count(self, obj):
+    def get_likes_count(self, obj) -> int:
         return obj.likes.count()
 
-    def get_comments_count(self, obj):
+    def get_comments_count(self, obj) -> int:
         return obj.comments.count()
 
 
@@ -74,17 +62,8 @@ class UserDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = [
-            "id",
-            "username",
-            "avatar",
-            "email",
-            "posts_count",
-            "followers_count",
-            "following_count",
-            "is_following",
-            "posts",
-        ]
+        fields = ["id", "username", "avatar", "email", "posts_count",
+                  "followers_count", "following_count", "is_following", "posts"]
 
     def get_posts(self, obj) -> list:
         queryset = get_posts_with_optimization(user=obj)
