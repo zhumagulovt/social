@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-# Create your models here.
+
 class Chat(models.Model):
     user1 = models.ForeignKey(
         User, on_delete=models.CASCADE, verbose_name="User1", related_name="+"

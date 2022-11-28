@@ -16,8 +16,8 @@ class PostsListSerializer(serializers.ModelSerializer):
     content = serializers.SerializerMethodField()
     user = UserSerializer(read_only=True)
     image = serializers.SerializerMethodField(read_only=True)
-    likes_count = serializers.SerializerMethodField(read_only=True)
-    comments_count = serializers.SerializerMethodField(read_only=True)
+    likes_count = serializers.IntegerField(read_only=True)
+    comments_count = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Post
@@ -40,12 +40,6 @@ class PostsListSerializer(serializers.ModelSerializer):
         if img:
             return "http://localhost:8000" + str(img[0].image.url)
         return None
-
-    def get_likes_count(self, obj):
-        return obj.likes.count()
-
-    def get_comments_count(self, obj):
-        return obj.comments.count()
 
 
 class CommentSerializer(serializers.ModelSerializer):

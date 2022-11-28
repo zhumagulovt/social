@@ -133,5 +133,6 @@ dmypy.json
 
 
 .vscode/*
+.idea/
 
 populate.py
