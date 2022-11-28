@@ -9,7 +9,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-def send_confirmation_link(template, user, path, title):
+def send_confirmation_link(template: str, user: User, path: str, title: str) -> None:
 
     html_message = render_to_string(
         template,
