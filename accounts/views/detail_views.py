@@ -9,15 +9,18 @@ from drf_spectacular.utils import extend_schema
 
 from ..serializers import UserDetailSerializer, UserEditSerializer
 
+from ..services import get_user_detail
+
 User = get_user_model()
 
 
 class UserDetailView(generics.RetrieveAPIView):
     """Get detail info about user"""
 
-    lookup_field = "username"
     serializer_class = UserDetailSerializer
-    queryset = User.objects.all()
+
+    def get_object(self):
+        return get_user_detail(username=self.kwargs['username'])
 
 
 class UserEditView(generics.UpdateAPIView):

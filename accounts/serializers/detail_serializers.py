@@ -54,10 +54,10 @@ class UserPostSerializer(serializers.ModelSerializer):
 class UserDetailSerializer(serializers.ModelSerializer):
     """Serializer for user with all fields and posts"""
 
-    followers_count = serializers.SerializerMethodField(read_only=True)
-    following_count = serializers.SerializerMethodField(read_only=True)
-    posts_count = serializers.SerializerMethodField(read_only=True)
-    posts = serializers.SerializerMethodField(read_only=True)
+    followers_count = serializers.IntegerField(read_only=True)
+    following_count = serializers.IntegerField(read_only=True)
+    posts_count = serializers.IntegerField(read_only=True)
+    posts = UserPostSerializer(many=True, read_only=True)
     is_following = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
@@ -65,27 +65,12 @@ class UserDetailSerializer(serializers.ModelSerializer):
         fields = ["id", "username", "avatar", "email", "posts_count",
                   "followers_count", "following_count", "is_following", "posts"]
 
-    def get_posts(self, obj) -> list:
-        queryset = get_posts_with_optimization(user=obj)
-        data = UserPostSerializer(queryset, many=True).data
-
-        return data
-
-    def get_followers_count(self, obj) -> int:
-        return obj.followers.count()
-
-    def get_following_count(self, obj) -> int:
-        return obj.following.count()
-
     def get_is_following(self, obj) -> bool:
         user = self.context["request"].user
         if user.is_authenticated:
             if obj in user.following.all():
                 return True
         return False
-
-    def get_posts_count(self, obj) -> int:
-        return obj.posts.count()
 
 
 class UserEditSerializer(serializers.ModelSerializer):

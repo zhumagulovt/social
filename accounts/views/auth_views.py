@@ -5,7 +5,10 @@ from rest_framework.views import APIView
 
 from drf_spectacular.utils import extend_schema
 
-from ..serializers import *
+from ..serializers import (
+    UserRegistrationSerializer,
+    UserActivationSerializer
+)
 
 User = get_user_model()
 

@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
 from django.db.models import Model, Count
-from django.db.models.expressions import Exists
 
 from .models import Post
 
