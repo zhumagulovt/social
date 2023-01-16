@@ -71,7 +71,7 @@ class UserActivateTestCase(APITestCase):
         uid = queries[0].split("=")[1]
         token = queries[1].split("=")[1]
 
-        return (uid, token)
+        return uid, token
 
     def test_activate(self):
         # Before activating
@@ -84,7 +84,8 @@ class UserActivateTestCase(APITestCase):
         uid, token = self.parse_message(message)
         data = {"uid": uid, "token": token}
 
-        response = self.client.post(url, data=data, format="json")
+        # send response to activate user
+        self.client.post(url, data=data, format="json")
 
         # After activating
         user = User.objects.get(pk=1)
