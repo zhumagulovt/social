@@ -2,8 +2,8 @@ from django.contrib.auth import get_user_model
 
 from rest_framework import serializers
 
-from posts.models import Post
-from posts.usecases import get_posts_with_optimization
+from social.posts.models import Post
+from social.posts.usecases import get_posts_with_optimization
 
 User = get_user_model()
 

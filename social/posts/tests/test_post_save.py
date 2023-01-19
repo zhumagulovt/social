@@ -23,7 +23,7 @@ class SavedTest(APITestCase):
 
         self.client.force_authenticate(user=self.user)
         response = self.client.post(
-            "/api/v1/posts/1/save/"
+            f"/api/v1/posts/{self.post.pk}/save/"
         )
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -35,7 +35,7 @@ class SavedTest(APITestCase):
 
         self.client.force_authenticate(user=self.user)
         response = self.client.post(
-            "/api/v1/posts/1/save/"
+            f"/api/v1/posts/{self.post.pk}/save/"
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
