@@ -16,6 +16,9 @@ drf-spectacular = "0.24.2"
 django-debug-toolbar = "^3.8.1"
 
 
+[tool.poetry.group.dev.dependencies]
+flake8 = "^6.0.0"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
